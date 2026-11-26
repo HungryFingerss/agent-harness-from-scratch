@@ -76,9 +76,9 @@ Customer -> Employee (support rep, via SupportRepId)
 
 - [x] Explore the data with plain SQL and map the schema
 - [x] `tools.py`: six tools, parameterised queries, errors written for the model
-- [ ] Automated tests for the tools (against answers checked by hand)
-- [ ] Tool descriptions for the model
-- [ ] One raw HTTP call to Groq with tools
+- [x] Automated tests for the tools: 16 tests against answers checked by hand, each on a fresh copy of the database (`pytest`)
+- [ ] Tool descriptions for the model (1 of 6 written: `find_customer`)
+- [x] One raw HTTP call to Groq with tools (`llm.py`: plain `requests`, retries on network errors, 429 and 5xx); the model replied with a `find_customer` tool call
 - [ ] The agent loop, with code-enforced rules and a step limit
 - [ ] Error handling (bad tool calls, database errors, timeouts, rate limits)
 - [ ] Trace log and test conversations
@@ -90,7 +90,17 @@ python -m venv .venv
 .venv\Scripts\activate        # Windows
 ```
 
-Uses only Python's built-in `sqlite3` so far.
+```
+pip install requests python-dotenv pytest
+```
+
+Create a `.env` file (never committed) with your Groq API key:
+
+```
+GROQ_API_KEY=your-key-here
+```
+
+Run the tests with `python -m pytest` from the project folder.
 
 ## Credits
 
