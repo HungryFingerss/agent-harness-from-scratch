@@ -4,6 +4,7 @@ import tools
 
 import os
 from dotenv import load_dotenv
+import json
 
 load_dotenv()
 
@@ -16,4 +17,4 @@ tools.cur = tools.connection.cursor()
 
 print("practice_test===", tools.update_email(58, "manoj.new@gmail.com"))
 
-print(groq_key[:4])
+print(json.loads('["foo", {"bar":["baz", null, 1.0, 2]}]')[0])

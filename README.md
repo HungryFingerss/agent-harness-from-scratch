@@ -1,10 +1,10 @@
 # Agent Harness From Scratch
 
-A customer-support agent for a small online music store, built **by hand, line by line**, to understand exactly how an AI agent works underneath the frameworks.
+A customer-support agent for a small online music store, built this to understand exactly how an AI agent works underneath the frameworks.
 
 ## Why this project
 
-I had read plenty about agents: tool calling, the agent loop, guardrails. But reading about a loop and writing one are different things. So I'm building the whole harness myself, without AI writing the code and without an agent framework, until every step is something I've written and understood:
+I had read about agents: tool calling, the agent loop, guardrails. But reading about a loop and writing one are different things. So I'm building the whole harness myself, without AI writing the code and without an agent framework, until every step is something I've written and understood:
 
 - how a model is told which tools exist,
 - how it asks for a tool, and how my code runs it,
@@ -61,7 +61,7 @@ The [Chinook sample database](https://github.com/lerocha/chinook-database): a mu
 
 **Download:** get `Chinook_Sqlite.sqlite` from the [Chinook releases page](https://github.com/lerocha/chinook-database/releases) (under Assets) and put it in this folder. The database file isn't committed here, because the tests change it.
 
-My hand-drawn map of the tables:
+Hand-drawn map of the tables:
 
 ![Chinook schema](database_schema.png)
 
@@ -77,10 +77,13 @@ Customer -> Employee (support rep, via SupportRepId)
 - [x] Explore the data with plain SQL and map the schema
 - [x] `tools.py`: six tools, parameterised queries, errors written for the model
 - [x] Automated tests for the tools: 16 tests against answers checked by hand, each on a fresh copy of the database (`pytest`)
-- [ ] Tool descriptions for the model (1 of 6 written: `find_customer`)
+- [x] Tool descriptions for the model (5 of 6: each says *when* to use the tool and what comes back; `update_email` next)
 - [x] One raw HTTP call to Groq with tools (`llm.py`: plain `requests`, retries on network errors, 429 and 5xx); the model replied with a `find_customer` tool call
-- [ ] The agent loop, with code-enforced rules and a step limit
-- [ ] Error handling (bad tool calls, database errors, timeouts, rate limits)
+- [x] The agent loop (`agent.py`): model → tool calls → results back → repeat, max 8 steps; the customer's ID lives in the harness's state, never in the model's hands
+- [ ] Error handling: bad JSON arguments, unknown tools, tool errors and unexpected failures go back to the model ✓; LLM failures inside the loop still to do
+- [ ] The confirm step for `update_email` (prepare → customer says yes → apply)
+- [ ] A system prompt: what the agent is, what it can help with, "today" for the old data
+- [ ] A terminal chat (`main.py`)
 - [ ] Trace log and test conversations
 
 ## Setup
@@ -102,6 +105,3 @@ GROQ_API_KEY=your-key-here
 
 Run the tests with `python -m pytest` from the project folder.
 
-## Credits
-
-I write every line of code by hand. Claude helped plan the design and reviews the code at checkpoints.
